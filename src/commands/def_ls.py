@@ -5,9 +5,6 @@ from datetime import datetime
 
 import typer
 
-from common.config import LOGGING_CONFIG
-
-logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 
@@ -69,19 +66,19 @@ def ls(args):
                 continue
             except UserWarning as e:  # ошибки пользователя
                 typer.echo(e, err=True)
-                logger.error(e)
+                logger.error("Ошибка пользователя {e}")
                 continue
             except OSError as e:
                 typer.echo(
                     typer.style("Ошибка операционной системы", fg=typer.colors.RED)
                 )
-                logger.error(e)
+                logger.error("Ошибка операционной системы {e}")
                 continue
             except Exception as e:  # ошибки Exception
                 typer.echo(
                     typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED)
                 )
-                logger.error(e)
+                logger.error("Произошла непредвиденная ошибка {e}")
                 continue
 
         else:  # ls -l
@@ -129,7 +126,7 @@ def ls(args):
                         "Произошла ошибка. Папка не найдена", fg=typer.colors.RED
                     )
                 )
-                logger.error(e)
+                logger.error("Произошла ошибка. Папка не найдена {e}")
                 continue
             except NotADirectoryError as e:  # файл а не папка
                 typer.echo(
@@ -148,11 +145,11 @@ def ls(args):
                 typer.echo(
                     typer.style("Ошибка операционной системы", fg=typer.colors.RED)
                 )
-                logger.error(e)
+                logger.error("Ошибка операционной системы {e}")
                 continue
             except Exception as e:  # ошибки Exception
                 typer.echo(
                     typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED)
                 )
-                logger.error(e)
+                logger.error("Произошла непредвиденная ошибка {e}")
                 continue

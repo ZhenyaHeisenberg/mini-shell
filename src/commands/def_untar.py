@@ -3,9 +3,6 @@ import shutil  # для операций с файлами
 
 import typer
 
-from common.config import LOGGING_CONFIG
-
-logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 
@@ -21,13 +18,11 @@ def untar(args):
             if ".tar" in path:
                 # Разархивация
                 shutil.unpack_archive(path)
-                typer.echo(typer.style("Файл разархивирован", fg=typer.colors.GREEN))
-                logger.info("Успешная архивация")
+                typer.echo(typer.style("Файл распакован", fg=typer.colors.GREEN))
+                logger.info("Успешная распаковка")
             else:
-                typer.echo(
-                    typer.style("Разрхивация неархива невозможна", fg=typer.colors.RED)
-                )
-                logger.info("Попытка архивации не директории")
+                typer.echo("Распаковка неархива невозможна")
+                logger.info("Попытка распаковки неархива")
                 return
 
         except FileNotFoundError as e:

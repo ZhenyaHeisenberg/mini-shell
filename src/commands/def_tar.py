@@ -3,37 +3,35 @@ import shutil  # для операций с файлами
 
 import typer
 
-from common.config import LOGGING_CONFIG
-
-logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 
 def tar(args):
     if not args:
-        print("Укажите имя файла или папки для удаления")
-        return
+        typer.echo("Укажите имя файла или папки для архивирования")
+        logger.error("Имя файла или директории не указано")
+        return None
 
     for i in range(len(args)):
         path = args[i]
 
         try:
-            # архивируем в zip
+            # архивируем в tar
             shutil.make_archive(path, "tar", path)
             typer.echo(typer.style("Успешная архивация", fg=typer.colors.GREEN))
             logger.info("Успешная архивация")
 
         except FileNotFoundError as e:
-            typer.echo(typer.style("Папка не найдена", fg=typer.colors.RED))
-            logger.error(e)
+            typer.echo(typer.style("Файл не найден", fg=typer.colors.RED))
+            logger.error("Файл не найден: {e}")
             return
 
         except PermissionError as e:
             typer.echo(typer.style("Отказано в доступе", fg=typer.colors.RED))
-            logger.error(e)
+            logger.error("Отказано в доступе: {e}")
             return
 
         except Exception as e:
             typer.echo(typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED))
-            logger.error(e)
+            logger.error("Произошла непредвиденная ошибка: {e}")
             return

@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def zip(args):
     if not args:
-        print("Укажите имя файла или папки для архивирования")
+        typer.echo("Укажите имя файла или папки для архивирования")
         logger.error("Имя файла или директории не указано")
         return None
 
@@ -23,15 +23,15 @@ def zip(args):
 
         except FileNotFoundError as e:
             typer.echo(typer.style("Папка не найдена"))
-            logger.error(e)
+            logger.error("Файл не найден", e)
             return
 
         except PermissionError as e:
             typer.echo(typer.style("Отказано в доступе", fg=typer.colors.RED))
-            logger.error(e)
+            logger.error("Отказано в доступе", e)
             return
 
         except Exception as e:
             typer.echo(typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED))
-            logger.error(e)
+            logger.error("Произошла непредвиденная ошибка", e)
             return
