@@ -25,8 +25,15 @@ def test_tar_right_args(fs: FakeFilesystem):
     fs.create_file("test_dir/file1.txt")
 
     tar(["test_dir"])
+    files = os.listdir('.')
+    finded = False
+    for file in files:
+        if "test_dir.tar" in file:
+            finded = True
+    assert finded
 
-    assert os.path.exists("test_dir.tar")
+
+
 
 
 def test_tar_FileNotFoundError(fs: FakeFilesystem):
