@@ -22,16 +22,16 @@ def zip(args):
             logger.info("Успешная архивация")
 
         except FileNotFoundError as e:
-            typer.echo(typer.style("Папка не найдена"))
-            logger.error("Файл не найден", e)
+            typer.echo(typer.style("Файл не найден", fg=typer.colors.RED))
+            logger.error("Файл не найден: {e}")
             return
 
         except PermissionError as e:
             typer.echo(typer.style("Отказано в доступе", fg=typer.colors.RED))
-            logger.error("Отказано в доступе", e)
+            logger.error("Отказано в доступе: {e}")
             return
 
         except Exception as e:
             typer.echo(typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED))
-            logger.error("Произошла непредвиденная ошибка", e)
+            logger.error("Произошла непредвиденная ошибка: {e}")
             return

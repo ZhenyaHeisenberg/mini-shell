@@ -4,9 +4,6 @@ import shutil  # для операций с файлами
 
 import typer
 
-from common.config import LOGGING_CONFIG
-
-logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 
@@ -84,24 +81,24 @@ def cp(args):
 
                 else:
                     shutil.copy2(path1, path2)  # copy2 для сохранения метаданных
-                    print("Файл скопирован: {path1} -> {path2}")
+                    typer.echo(typer.style(f"Файл скопирован: {path1} -> {path2}",fg=typer.colors.GREEN))
                     logger.info("Успешный копирование из '{path1}' в '{path2}'")
 
-        except IsADirectoryError as e:
-            logger.error(e)
+        except PermissionError as e:
+            logger.error(f"Ошибка доступа '{e}'")
             typer.echo(
                 typer.style(
-                    "Произошла ошибка. Используйте 'cp -r' для копирования непустых папок ",
+                    "Ошибка доступа",
                     fg=typer.colors.RED,
                 )
             )
 
         except FileNotFoundError as e:
-            logger.error(e)
+            logger.error(f"Произошла ошибка. Файл не найден '{e}'")
             typer.echo(typer.style("Произошла ошибка. Файл не найден", fg=typer.colors.RED))
 
         except FileExistsError as e:
-            logger.error(e)
+            logger.error("Произошла ошибка. Элемент с таким названием уже существует '{e}'")
             typer.echo(typer.style("Произошла ошибка. Элемент с таким названием уже существует",fg=typer.colors.RED,))
 
         except UserWarning as e:  # ошибки пользователя
@@ -113,5 +110,5 @@ def cp(args):
             logger.error(e)
 
     else:
-        print("Использование: cp <исходный_файл> <целевой_файл>")
+        typer.echo("Использование: cp <исходный_файл> <целевой_файл>")
         logger.error("ERROR: Неверное колличество аргументов")

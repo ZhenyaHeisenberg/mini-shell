@@ -28,7 +28,6 @@ def ls(args):
             path = os.getcwd()
 
         if not meta:  # ls
-            typer.echo(f"\nls '{path}'")
             try:
                 files = os.listdir(path)
 
@@ -53,7 +52,7 @@ def ls(args):
                         "Произошла ошибка. Папка не найдена", fg=typer.colors.RED
                     )
                 )
-                logger.error(e)
+                logger.error(f"Произошла ошибка. Папка не найдена '{e}")
                 continue
             except NotADirectoryError as e:  # файл а не папка
                 typer.echo(
@@ -62,7 +61,7 @@ def ls(args):
                         fg=typer.colors.RED,
                     )
                 )
-                logger.error(e)
+                logger.error(f"Применение ls к файлу '{e}'")
                 continue
             except UserWarning as e:  # ошибки пользователя
                 typer.echo(e, err=True)
@@ -126,7 +125,7 @@ def ls(args):
                         "Произошла ошибка. Папка не найдена", fg=typer.colors.RED
                     )
                 )
-                logger.error("Произошла ошибка. Папка не найдена {e}")
+                logger.error(f"Произошла ошибка. Папка не найдена '{e}'")
                 continue
             except NotADirectoryError as e:  # файл а не папка
                 typer.echo(
@@ -135,11 +134,11 @@ def ls(args):
                         fg=typer.colors.RED,
                     )
                 )
-                logger.error(e)
+                logger.error(f"Применение ls к файлу '{e}'")
                 continue
             except UserWarning as e:  # ошибки пользователя
                 typer.echo(e, err=True)
-                logger.error(e)
+                logger.error("Ошибка пользователя {e}")
                 continue
             except OSError as e:  # ошибки ОС
                 typer.echo(

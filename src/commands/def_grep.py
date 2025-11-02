@@ -1,7 +1,7 @@
-import os
-import typer
-
 import logging
+import os
+
+import typer
 
 from common.config import LOGGING_CONFIG
 
@@ -48,7 +48,7 @@ def grep(args):
                 logger.error("Попытка применения grep к диектории")
                 return
 
-            with open(path, "r", encoding="utf-8") as file:
+            with open(path, encoding="utf-8") as file:
                 content = file.read()
                 finded = False
 
@@ -70,7 +70,7 @@ def grep(args):
 
                 if not os.path.isdir(full_path):
                     try:
-                        with open(full_path, "r", encoding="utf-8") as file:
+                        with open(full_path, encoding="utf-8") as file:
                             content = file.read()
                             finded = False
 
