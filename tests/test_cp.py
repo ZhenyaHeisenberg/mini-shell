@@ -13,7 +13,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 def test_cp_empty_args():
     with patch("typer.echo") as mock_echo:
         cp([])
-
         mock_echo.assert_called_with("Использование: cp <исходный_файл> <целевой_файл>")
 
 
@@ -63,13 +62,31 @@ def test_cp_recursive_to_file(fs: FakeFilesystem):
         assert "Копирование в файл невозможно" in error
 
 
+def test_cp_not_empty_dir_without_recursive(fs: FakeFilesystem):
+    fs.create_dir("test_dir_from")
+    fs.create_file("test_dir_from/test_file")
+    fs.create_dir("test_dir_to")
+
+    with patch('src.commands.def_cp.logger') as mock_logger:
+        cp(["test_dir_from", "test_dir_to"])
+        error = str(mock_logger.error.call_args)
+        assert "Попытка копирования непустой дериктории без '-r'" in error
+
+
+def test_cp_empty_dir_without_recursive(fs: FakeFilesystem):
+    fs.create_dir("test_dir_from")
+    fs.create_dir("test_dir_to")
+    cp(["test_dir_from", "test_dir_to"])
+    assert os.path.exists("test_dir_to/test_dir_from")
+
+
+
+
 def test_cp_to_new(fs: FakeFilesystem):
     fs.create_file("test_file_from")
     fs.create_dir("test_dir_from")
-
     cp(["test_file_from", "test_file_to"]) #file to file
     assert os.path.exists("test_file_to")
-
     cp(["-r", "test_dir_from", "test_dir_to"]) #dir to dir
     assert os.path.exists("test_dir_to")
 
@@ -104,59 +121,24 @@ def test_cp_FileExistsError(fs: FakeFilesystem):
         assert "Произошла ошибка. Элемент с таким названием уже существует" in error
 
 
-"""def test_cp_right_args_dir(fs: FakeFilesystem): #удаление каталога
+def test_ls_UserWarningr(fs: FakeFilesystem):
     fs.create_dir("test_dir")
-    fs.create_file("test_dir/file1.txt")
-    with patch('builtins.input', return_value='y'): #вместо input() сразу возвращаем значение 'y'
-        cp(["-r", "test_dir"])
-        files = os.listdir('.')
-        finded = False
-        for file in files:
-            if "test_dir" in file:
-                finded = True
-        assert not finded #Директории не должно быть
-
-
-def test_cp_right_args_file(fs: FakeFilesystem): #удаление файла
-    fs.create_file("test_file.txt")
-    cp(["test_file.txt"])
-    files = os.listdir('.')
-    finded = False
-    for file in files:
-        if "test_dir" in file:
-            finded = True
-    assert not finded #Директории не должно быть
-
-
-def test_cp_FileNotFoundError():
-    with patch('src.commands.def_cp.logger') as mock_logger: #вместо реального удаления записываем потенциальный результат
-        cp(["test_file.txt"])
-        error = str(mock_logger.error.call_args)
-        assert "Не удается найти указанный файл" in error
-
-
-def test_cp_PecpissionError(fs: FakeFilesystem):
-    fs.create_dir("test_dir")
+    fs.create_dir("test_new_dir")
     with patch('src.commands.def_cp.logger') as mock_logger:
-        with patch('os.remove', side_effect=PermissionError("Отказано в доступе")):
-            cp(["test_dir"])
+        with patch('os.listdir', side_effect=UserWarning("Пользовательская ошибка")):
+            cp(["test_dir", "test_new_dir"])
             error = str(mock_logger.error.call_args)
-            assert "Отказано в доступе" in error
+            assert "Пользовательская ошибка" in error
 
 
-def test_cp_Exception_dir(fs: FakeFilesystem):
-
+def test_ls_Exception(fs: FakeFilesystem):
     fs.create_dir("test_dir")
-
+    fs.create_dir("test_new_dir")
     with patch('src.commands.def_cp.logger') as mock_logger:
-        with patch('shutil.cptree', side_effect=Exception("Произошла непредвиденная ошибка")):
-            cp(["-r", "test_dir"])
-
+        with patch('os.listdir', side_effect=Exception("Произошла непредвиденная ошибка")):
+            cp(["test_dir", "test_new_dir"])
             error = str(mock_logger.error.call_args)
-
-            assert "Произошла непредвиденная ошибка" in error"""
-
-
+            assert "Произошла непредвиденная ошибка" in error
 
 
 
