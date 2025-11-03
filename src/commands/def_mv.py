@@ -3,9 +3,11 @@ import os
 
 import typer
 
-from common.config import LOGGING_CONFIG
+"""from common.config import LOGGING_CONFIG
 
 logging.config.dictConfig(LOGGING_CONFIG)
+logger = logging.getLogger(__name__)"""
+
 logger = logging.getLogger(__name__)
 
 
@@ -18,7 +20,7 @@ def mv(args):
     path1, path2 = args[0], args[1]
 
     try:
-        # прроверяем, существует ли path1
+        # проверяем, существует ли path1
         if not os.path.exists(path1):
             typer.echo(
                 typer.style("Произошла ошибка. Папка не найдена", fg=typer.colors.RED)
@@ -44,12 +46,12 @@ def mv(args):
 
     except PermissionError as e:
         typer.echo(typer.style("Нет прав доступа", fg=typer.colors.RED))
-        logger.error(e)
+        logger.error(f"Нет прав доступа '{e}'")
 
     except OSError as e:
         typer.echo(typer.style("Ошибка операционной системы", fg=typer.colors.RED))
-        logger.error(e)
+        logger.error("Ошибка операционной системы '{e}'")
 
     except Exception as e:
         typer.echo(typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED))
-        logger.error(e)
+        logger.error("Произошла непредвиденная ошибка '{e}'")

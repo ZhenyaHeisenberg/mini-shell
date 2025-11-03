@@ -3,9 +3,6 @@ import os
 
 import typer
 
-from common.config import LOGGING_CONFIG
-
-logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 
@@ -25,17 +22,13 @@ def cd(args):
                 new_directory = os.getcwd() #Оказались
                 logger.info(f"Успешный переход из '{old_directory}' в '{new_directory}'")
 
-            except FileNotFoundError as e:
-                typer.echo(typer.style("Произошла ошибка. Папка не найдена", fg=typer.colors.RED))
-                logger.error(e)
-
             except OSError as e:
                 typer.echo(typer.style("Ошибка операционной системы", fg=typer.colors.RED))
-                logger.error(e)
+                logger.error(f"Ошибка операционной системы '{e}'")
 
             except Exception as e:
                 typer.echo(typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED))
-                logger.error(e)
+                logger.error(f"Произошла непредвиденная ошибка '{e}'")
         else:
             typer.echo(typer.style("Произошла ошибка. Слишком много аргументов", fg=typer.colors.RED))
             logger.error("Произошла ошибка. Слишком много аргументов")

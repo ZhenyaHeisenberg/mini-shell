@@ -54,7 +54,7 @@ def cp(args):
                     os.path.isdir(path1)
                     and os.path.isdir(path2)
                     and os.listdir(path1) == []
-                ):
+                ): #Копирование пустой директории без -r
                     new_path = os.path.join(
                         path2, os.path.basename(path1)
                     )  # path2+последняя часть path1
@@ -103,11 +103,11 @@ def cp(args):
 
         except UserWarning as e:  # ошибки пользователя
             typer.echo(e, err=True)
-            logger.error(e)
+            logger.error(f"Пользовательская ошибка '{e}'")
 
         except Exception as e:  # ошибки Exception
             typer.echo(typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED))
-            logger.error(e)
+            logger.error(f"Произошла непредвиденная ошибка '{e}'")
 
     else:
         typer.echo("Использование: cp <исходный_файл> <целевой_файл>")
