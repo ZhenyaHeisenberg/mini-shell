@@ -92,46 +92,6 @@ def test_grep_less_than_two_arguments(fs: FakeFilesystem):
         error = str(mock_logger.error.call_args)
         assert "Неверное колличество аргументов" in error
 
-"""def test_grep_UnicodeDecodeError(fs: FakeFilesystem):
-    binary_data = b'\xff\xfe\x00\x01\x02\x03\x04\x05'
-    fs.create_dir("test_dir")
-    fs.create_file("test_dir/test_file", contents=binary_data)
-    with patch('src.commands.def_grep.logger') as mock_logger:
-        grep(["test text", "test_dir"])
-        error = str(mock_logger.error.call_args)
-        assert "Пропущен бинарный файл" in error"""
-
-
-"""def test_grep_dir(fs: FakeFilesystem):
-    fs.create_dir("test_dir")
-    fs.create_file("test_dir/test_file.txt")
-    fs.create_dir("test_new_dir")
-    grep(["-r", "test_dir", "test_new_dir"])
-    shutil.rmtree("test_dir")
-
-    files_dir1 = os.listdir('test_new_dir')
-    finded1 = False
-    for file_dir1 in files_dir1:
-        if "test_dir" in file_dir1:
-            finded1 = True
-    assert finded1 #В каталоге test_new_dir появился каталог test_new_dir/test_dir
-
-    files_dir2 = os.listdir('test_new_dir/test_dir')
-    finded2 = False
-    for file_dir2 in files_dir2:
-        if "test_file.txt" in file_dir2:
-            finded2 = True
-    assert finded2 #В каталоге test_new_dir/test_dir появился файл test_file.txt
-
-
-def test_grep_file(fs: FakeFilesystem):
-    fs.create_dir("test_dir")
-    fs.create_file("test_dir/test_file1.txt", contents="test text")
-    grep(["test_dir/test_file1.txt", "test_dir/test_file2.txt"])
-    assert os.path.exists("test_dir/test_file2.txt")
-    with open("test_dir/test_file2.txt") as text:
-        assert text.read() == "test text"""
-
 
 
 
