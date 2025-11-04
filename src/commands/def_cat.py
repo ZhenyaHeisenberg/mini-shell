@@ -5,12 +5,11 @@ import typer
 
 logger = logging.getLogger(__name__)
 
-
-def cat(args):
+def cat(args: list[str]) -> str:
     if args == [""]:
         typer.echo(typer.style("Укажите имя файла", fg=typer.colors.RED))
         logger.error("Имя файла не указано")
-        return
+        return None
 
     for i in range(len(args)):
         filename = args[i]
@@ -20,7 +19,7 @@ def cat(args):
         if os.path.isdir(filename):
             typer.echo(typer.style("Произошла ошибка. Функция 'cat' только для файлов",fg=typer.colors.RED,))
             logger.error("Попытка применения cat директории")
-            return
+            return None
 
         try:
             with open(filename, encoding="utf-8") as file:

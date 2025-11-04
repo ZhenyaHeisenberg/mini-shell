@@ -6,7 +6,7 @@ import typer
 logger = logging.getLogger(__name__)
 
 
-def grep(args):
+def grep(args: list[str]) -> str:
     typer.echo(f"\ngrep {' '.join(args)}\n")
 
     if "-r" in args:
@@ -20,7 +20,7 @@ def grep(args):
         args.remove("-i")
     else:
         low = False
-        
+
     if len(args) == 2:
 
         pattern = str(args[0])

@@ -7,7 +7,7 @@ import typer
 logger = logging.getLogger(__name__)
 
 
-def cp(args):
+def cp(args: list[str]) ->  None | str:
     recursive = False
     if "-r" in args:
         recursive = True

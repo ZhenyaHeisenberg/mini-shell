@@ -7,11 +7,11 @@ import typer
 logger = logging.getLogger(__name__)
 
 
-def rm(args):
+def rm(args: list[str]) ->  None | str:
     if not args:
         typer.echo("Укажите имя файла или папки для удаления")
         logger.info("Укажите имя файла или папки для удаления")
-        return
+        return None
 
     if "-r" in args:
         recursive = True
@@ -44,25 +44,25 @@ def rm(args):
         except FileNotFoundError as e:
             typer.echo(typer.style("Файл или папка не найдена", fg=typer.colors.RED))
             logger.error(e)
-            return
+            return None
 
         except NotADirectoryError as e:
             typer.echo(typer.style("Флаг '-r' только для удаления директорий", fg=typer.colors.RED))
             logger.error(f"Флаг '-r' только для удаления директорий '{e}'")
-            return
+            return None
 
         except IsADirectoryError as e:
             typer.echo(typer.style("Для удаления каталога используйте флаг '-r'", fg=typer.colors.RED))
             logger.error(e)
-            return
+            return None
 
         except PermissionError as e:
             typer.echo(typer.style("Отказано в доступе", fg=typer.colors.RED))
             typer.echo("Подсказка: используйте флаг '-r' для удаления каталогов ")
             logger.error(e)
-            return
+            return None
 
         except Exception as e:
             typer.echo(typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED))
             logger.error(f"Произошла непредвиденная ошибка '{e}'")
-            return
+            return None

@@ -11,11 +11,11 @@ logger = logging.getLogger(__name__)"""
 logger = logging.getLogger(__name__)
 
 
-def mv(args):
+def mv(args: list[str]) ->  None | str:
     if len(args) != 2:
         typer.echo(typer.style("Использование: mv <источник> <цель>", fg=typer.colors.RED))
         logger.error("ERROR: Неверное колличество аргументов")
-        return
+        return None
 
     path1, path2 = args[0], args[1]
 
@@ -26,7 +26,7 @@ def mv(args):
                 typer.style("Произошла ошибка. Папка не найдена", fg=typer.colors.RED)
             )
             logger.error(f"ERROR: '{path1}' не существует")
-            return
+            return None
 
         # если path2 существует, перемещаем в неё
         if os.path.isdir(path2):

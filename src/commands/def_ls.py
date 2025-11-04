@@ -8,7 +8,7 @@ import typer
 logger = logging.getLogger(__name__)
 
 
-def ls(args):
+def ls(args: list[str]) -> str:
     meta = False  # содержит ли -l
     if "-l" in args:
         meta = True

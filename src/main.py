@@ -29,7 +29,6 @@ def main():
         user_input = input(f"\n{current_dir}$ ").strip()  # Текущая папка
 
         if user_input.lower() == "exit":  # Выход из программы
-            print("До свидания!")
             break
 
         if not user_input:
@@ -63,7 +62,7 @@ def main():
         execute_command(command, args)  # выполнить команду
 
 
-def execute_command(command, args):
+def execute_command(command: list[str], args: list[str]) -> None | str:
     try:
         match command:
             case "ls":
@@ -89,16 +88,16 @@ def execute_command(command, args):
             case "grep":
                 grep(args)
             case _:
-                print(f"Неизвестная команда: {command}")
+                typer.echo(f"Неизвестная команда: {command}")
 
     except FileNotFoundError as e:
-        print(f"Файл не найден: {e}")
+        typer.echo(f"Файл не найден: {e}")
     except PermissionError as e:
-        print(f"Нет прав доступа: {e}")
+        typer.echo(f"Нет прав доступа: {e}")
     except OSError as e:
-        print(f"Ошибка OS: {e}")
+        typer.echo(f"Ошибка OS: {e}")
     except Exception as e:
-        print(f"Неизвестная ошибка: {e}")  # Непредвиденная ошибка
+        typer.echo(f"Неизвестная ошибка: {e}")  # Непредвиденная ошибка
 
 
 if __name__ == "__main__":

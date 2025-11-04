@@ -6,7 +6,7 @@ import typer
 logger = logging.getLogger(__name__)
 
 
-def cd(args):
+def cd(args: list[str]) ->  None | str:
     old_directory = os.getcwd() #Изначально
 
     if args != [""] and args != ["~"]:
@@ -15,7 +15,7 @@ def cd(args):
             if not os.path.isdir(path):
                 typer.echo(typer.style("Произошла ошибка. Функция 'cd' только для директорий", fg=typer.colors.RED,))
                 logger.error("Попытка применения cd не для директории")
-                return
+                return None
 
             try:
                 os.chdir(path)  #Перейти в path
