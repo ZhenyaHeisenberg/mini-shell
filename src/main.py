@@ -36,7 +36,7 @@ def main():
 
         # Разбиваем ввод на команду и аргументы
         logger.info(user_input)
-        parts = user_input.split(" ")
+        parts = user_input.split()
         command = parts[0]
 
         argument = " ".join(parts[1:])
