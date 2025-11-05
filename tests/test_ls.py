@@ -11,11 +11,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 
 
-
-
-
-
-
 def test_ls_FileNotFoundError():
     with patch('src.commands.def_ls.logger') as mock_logger:
         ls(["test_dir"])

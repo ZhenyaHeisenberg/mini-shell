@@ -18,19 +18,6 @@ def test_grep_dir(fs: FakeFilesystem):
         assert "Попытка применения grep к диектории" in error
 
 
-
-"""def test_grep_file(fs: FakeFilesystem):
-    fs.create_file("test_file.txt", contents="test text 1\ntest text 2\n\ntest text 3")
-    with patch('src.commands.def_grep.typer.echo') as mock_echo:
-        grep(["test text 3", "test_file.txt"])
-        #output = [str(mock_echo.call_args_list)] #Список всех выводов typer.echo
-        finded = False
-        for line in mock_echo.call_args_list:
-            if "'test_file.txt' line 4: test text 3" in str(line):
-                finded = True
-        assert finded"""
-
-
 def test_grep_recursive_dir(fs: FakeFilesystem):
     fs.create_dir("test_dir")
     fs.create_file("test_dir/test_file1", contents="test text")
@@ -91,12 +78,6 @@ def test_grep_less_than_two_arguments(fs: FakeFilesystem):
         grep(["-r", "test_dir"]) #Не 2 аргумента
         error = str(mock_logger.error.call_args)
         assert "Неверное колличество аргументов" in error
-
-
-
-
-
-
 
 
 

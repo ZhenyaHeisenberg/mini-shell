@@ -27,13 +27,6 @@ def test_cd_right_args(fs: FakeFilesystem):
     assert (old_dir != new_dir) and ("test_dir2" in new_dir)
 
 
-"""def test_cd_FileNotFoundError(fs: FakeFilesystem):
-    with patch('src.commands.def_cd.logger') as mock_logger:
-        cd(["test_dir"])
-        error = str(mock_logger.error.call_args)
-        assert "Произошла ошибка. Папка не найдена" in error"""
-
-
 def test_ls_OSError(fs: FakeFilesystem):
     fs.create_dir("test_dir")
     with patch('src.commands.def_cd.logger') as mock_logger:

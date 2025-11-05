@@ -80,8 +80,6 @@ def test_cp_empty_dir_without_recursive(fs: FakeFilesystem):
     assert os.path.exists("test_dir_to/test_dir_from")
 
 
-
-
 def test_cp_to_new(fs: FakeFilesystem):
     fs.create_file("test_file_from")
     fs.create_dir("test_dir_from")
