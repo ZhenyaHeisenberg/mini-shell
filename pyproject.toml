@@ -1,8 +1,8 @@
 [project]
 name = "labs"
 version = "0.1.0"
-description = "Add your description here"
-requires-python = ">=3.13"
+description = "Mini Shell - это командная оболочка, написанная на Python, которая воспроизводит основные команды терминала Linux. Проект предоставляет платформу для выполнения файловых операций с цветным выводом, ures fliendly сообщениями при недопустимом вводе и системой логирования."
+requires-python = ">=3.12"
 dependencies = [
     "pytest>=8.4.2",
     "pip>=25.3",
