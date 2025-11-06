@@ -24,6 +24,16 @@ def rm(args: list[str]) ->  None | str:
 
         try:
             if recursive:
+                full_path = os.path.abspath(path) #получаем абсолютный путь
+                if full_path == os.path.abspath('/') or full_path == os.path.abspath('\\'): #является корневым каталогом
+                    typer.echo(typer.style("Удаление корневого каталога запрещено", fg=typer.colors.RED))
+                    logger.error(f"Попытка удаления корневого каталога: '{full_path}'")
+                    return None
+
+                if path == ".." or full_path in os.getcwd():
+                    typer.echo(typer.style("Удаление родительского каталога запрещено", fg=typer.colors.RED))
+                    logger.error(f"Попытка удаления родительского каталога: '{full_path}'")
+                    return None
             #if os.path.isdir(path):
                 #Запрашиваем подтверждение
                 typer.echo(typer.style(f"Вы уверены, что хотите удалить каталог '{path}' вместе со всем содержимым? (y/n)", fg=typer.colors.YELLOW))
