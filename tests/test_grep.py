@@ -20,12 +20,20 @@ def test_grep_dir(fs: FakeFilesystem):
 
 def test_grep_recursive_dir(fs: FakeFilesystem):
     fs.create_dir("test_dir")
-    fs.create_file("test_dir/test_file1", contents="test text")
-    fs.create_file("test_dir/test_file2", contents="other text")
+    fs.create_file("test_dir/test_file1.txt", contents="test text")
+    fs.create_file("test_dir/test_file2.txt", contents="other text")
     with patch('src.commands.def_grep.typer.echo') as mock_echo:
         grep(["-r", "test text", "test_dir"])
         output = str(mock_echo.call_args_list) #Список всех выводов typer.echo
-        assert "'test_file1' line 1: test text" in output
+        assert "'test_file1.txt' line 1: test text" in output
+
+
+def test_grep_file(fs: FakeFilesystem):
+    fs.create_file("test_file.txt", contents="test text")
+    with patch('src.commands.def_grep.typer.echo') as mock_echo:
+        grep(["test text", "test_file.txt"])
+        output = str(mock_echo.call_args_list) #Список всех выводов typer.echo
+        assert "line 1: test text" in output
 
 
 def test_grep_FileNotFoundError(fs: FakeFilesystem):

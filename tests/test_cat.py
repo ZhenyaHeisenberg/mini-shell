@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 def test_cat_empty_args():
     with patch('src.commands.def_cat.logger') as mock_logger:
-        cat([""])
+        cat([])
         error = str(mock_logger.error.call_args)
         assert "Имя файла не указано" in error
 
@@ -40,30 +40,12 @@ def test_cat_FileNotFoundError():
 
 
 def test_cat_PermissionError(fs: FakeFilesystem):
-    fs.create_file("test_file.txt", contents="test text")
-    open("test_file.txt")
+    fs.create_file("test_file.txt", contents="test text", st_mode=0o000)
     with patch('src.commands.def_cat.logger') as mock_logger:
-        cat(["test_dir"])
+        cat(["test_file.txt"])
         error = str(mock_logger.error.call_args)
-        assert "Произошла ошибка. Файл не найден" in error
+        assert "Нет прав доступа" in error
 
-
-def test_cat_OSError(fs: FakeFilesystem):
-    fs.create_file("test_file.txt", contents="test text")
-    with patch('src.commands.def_cat.logger') as mock_logger:
-        with patch('builtins.open', side_effect=OSError("Ошибка операционной системы")):
-            cat(["test_file.txt"])
-            error = str(mock_logger.error.call_args)
-            assert "Ошибка операционной системы" in error
-
-
-def test_cat_Exception(fs: FakeFilesystem):
-    fs.create_file("test_file.txt", contents="test text")
-    with patch('src.commands.def_cat.logger') as mock_logger:
-        with patch('builtins.open', side_effect=Exception("Произошла непредвиденная ошибка")):
-            cat(["test_file.txt"])
-            error = str(mock_logger.error.call_args)
-            assert "Произошла непредвиденная ошибка" in error
 
 
 

@@ -6,7 +6,7 @@ import typer
 logger = logging.getLogger(__name__)
 
 def cat(args: list[str]) -> str:
-    if args == [""]:
+    if args == []:
         typer.echo(typer.style("Укажите имя файла", fg=typer.colors.RED))
         logger.error("Имя файла не указано")
         return None
@@ -34,14 +34,5 @@ def cat(args: list[str]) -> str:
 
         except PermissionError as e:
             typer.echo(typer.style("Нет прав доступа", fg=typer.colors.RED))
-            logger.error(e)
+            logger.error("Нет прав доступа '{e}'")
 
-        except OSError as e:
-            typer.echo(typer.style("Ошибка операционной системы", fg=typer.colors.RED))
-            logger.error("Ошибка операционной системы '{e}'")
-            continue
-
-        except Exception as e:
-            typer.echo(typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED))
-            logger.error("Произошла непредвиденная ошибка '{e}'")
-            continue

@@ -13,12 +13,10 @@ def ls(args: list[str]) -> str:
     if "-l" in args:
         meta = True
         args.remove("-l")
-        if len(args) == 0:
-            args.append(".")
 
     """Если пустой ввод - добывить точку"""
-    if args[0] == "":
-        args[0] = "."
+    if args == []:
+        args.append(".")
 
     for i in range(len(args)):
         path = args[i]
@@ -47,13 +45,10 @@ def ls(args: list[str]) -> str:
                         else:  # не содержит пробел
                             typer.echo(f"{file}")
             except FileNotFoundError as e:
-                typer.echo(
-                    typer.style(
-                        "Произошла ошибка. Папка не найдена", fg=typer.colors.RED
-                    )
-                )
+                typer.echo(typer.style("Произошла ошибка. Папка не найдена", fg=typer.colors.RED))
                 logger.error(f"Произошла ошибка. Папка не найдена '{e}")
                 continue
+
             except NotADirectoryError as e:  # файл а не папка
                 typer.echo(
                     typer.style(
@@ -63,22 +58,15 @@ def ls(args: list[str]) -> str:
                 )
                 logger.error(f"Применение ls к файлу '{e}'")
                 continue
-            except UserWarning as e:  # ошибки пользователя
-                typer.echo(e, err=True)
-                logger.error("Ошибка пользователя {e}")
-                continue
-            except OSError as e:
+
+            except PermissionError as e:
+                logger.error(f"Ошибка доступа '{e}'")
                 typer.echo(
-                    typer.style("Ошибка операционной системы", fg=typer.colors.RED)
+                    typer.style(
+                        "Ошибка доступа",
+                        fg=typer.colors.RED,
+                    )
                 )
-                logger.error("Ошибка операционной системы {e}")
-                continue
-            except Exception as e:  # ошибки Exception
-                typer.echo(
-                    typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED)
-                )
-                logger.error("Произошла непредвиденная ошибка {e}")
-                continue
 
         else:  # ls -l
             typer.echo(f"\nls -l '{path}'")
@@ -127,6 +115,7 @@ def ls(args: list[str]) -> str:
                 )
                 logger.error(f"Произошла ошибка. Папка не найдена '{e}'")
                 continue
+            
             except NotADirectoryError as e:  # файл а не папка
                 typer.echo(
                     typer.style(
@@ -136,19 +125,17 @@ def ls(args: list[str]) -> str:
                 )
                 logger.error(f"Применение ls к файлу '{e}'")
                 continue
+            
             except UserWarning as e:  # ошибки пользователя
                 typer.echo(e, err=True)
                 logger.error("Ошибка пользователя {e}")
                 continue
-            except OSError as e:  # ошибки ОС
+            
+            except PermissionError as e:
+                logger.error(f"Ошибка доступа '{e}'")
                 typer.echo(
-                    typer.style("Ошибка операционной системы", fg=typer.colors.RED)
+                    typer.style(
+                        "Ошибка доступа",
+                        fg=typer.colors.RED,
+                    )
                 )
-                logger.error("Ошибка операционной системы {e}")
-                continue
-            except Exception as e:  # ошибки Exception
-                typer.echo(
-                    typer.style("Произошла непредвиденная ошибка", fg=typer.colors.RED)
-                )
-                logger.error("Произошла непредвиденная ошибка {e}")
-                continue

@@ -16,68 +16,34 @@ def cp(args: list[str]) ->  None | str:
     if len(args) == 2:
         path1, path2 = args[0], args[1]
 
+        if os.path.exists(path2) and not os.path.isdir(path2): # Путь2 - только папка
+            typer.echo(typer.style("Копирование в файл невозможно", fg=typer.colors.RED))
+            logger.error("Копирование в файл невозможно")
+            return None
+
         try:
             if recursive:  # есть -r
-                if os.path.exists(path2) and os.path.isdir(
-                    path2
-                ):  # если путь существует и это папка
-                    new_path = os.path.join(
-                        path2, os.path.basename(path1)
-                    )  # path2+последняя часть path1
-                    shutil.copytree(
-                        path1, new_path
-                    )  # копировать в новый, созданный путь
-                    typer.echo(
-                        typer.style("Папка успешно скопирована", fg=typer.colors.GREEN)
-                    )
+                if os.path.exists(path2):  # если путь существует
+                    new_path = os.path.join(path2, os.path.basename(path1))  # path2+последняя часть path1
+                    shutil.copytree(path1, new_path)  # копировать в новый, созданный путь
+                    typer.echo(typer.style("Папка успешно скопирована", fg=typer.colors.GREEN))
                     logger.info("Успешное копирование папки из '{path1}' в '{path2}'")
-
-                elif os.path.exists(path2) and not os.path.isdir(
-                    path2
-                ):  # если путь существует и это файл
-                    typer.echo(
-                        typer.style(
-                            "Копирование в файл невозможно", fg=typer.colors.RED
-                        )
-                    )
-                    logger.error("Копирование в файл невозможно")
 
                 else:  # если пути не существует
                     shutil.copytree(path1, path2)
-                    typer.echo(
-                        typer.style("Папка успешно скопирована", fg=typer.colors.GREEN)
-                    )
+                    typer.echo(typer.style("Папка успешно скопирована", fg=typer.colors.GREEN))
                     logger.info("Успешное копирование папки из '{path1}' в '{path2}'")
 
             else:  # нет -r
-                if (
-                    os.path.isdir(path1)
-                    and os.path.isdir(path2)
-                    and os.listdir(path1) == []
-                ): #Копирование пустой директории без -r
-                    new_path = os.path.join(
-                        path2, os.path.basename(path1)
-                    )  # path2+последняя часть path1
-                    shutil.copytree(
-                        path1, new_path
-                    )  # копировать в новый, созданный путь
-                    typer.echo(
-                        typer.style("Папка успешно скопирована", fg=typer.colors.GREEN)
-                    )
+                if (os.path.isdir(path1) and os.listdir(path1) == []): #Копирование пустой директории без -r
+                    new_path = os.path.join(path2, os.path.basename(path1))  # path2+последняя часть path1
+                    shutil.copytree(path1, new_path)  # копировать в новый, созданный путь
+                    typer.echo(typer.style("Папка успешно скопирована", fg=typer.colors.GREEN))
                     logger.info("Успешное копирование папки из '{path1}' в '{path2}'")
 
-                elif (
-                    os.path.isdir(path1)
-                    and os.path.isdir(path2)
-                    and os.listdir(path1) != []
-                ):
+                elif (os.path.isdir(path1) and os.listdir(path1) != []):
                     logger.error("Попытка копирования непустой дериктории без '-r'")
-                    typer.echo(
-                        typer.style(
-                            "Произошла ошибка. Используйте 'cp -r' для копирования непустых папок ",
-                            fg=typer.colors.RED,
-                        )
-                    )
+                    typer.echo(typer.style("Произошла ошибка. Используйте 'cp -r' для копирования непустых папок ",fg=typer.colors.RED,))
 
                 else:
                     shutil.copy2(path1, path2)  # copy2 для сохранения метаданных

@@ -27,22 +27,13 @@ def test_cd_right_args(fs: FakeFilesystem):
     assert (old_dir != new_dir) and ("test_dir2" in new_dir)
 
 
-def test_ls_OSError(fs: FakeFilesystem):
+def test_cd_PermissionError(fs: FakeFilesystem):
     fs.create_dir("test_dir")
     with patch('src.commands.def_cd.logger') as mock_logger:
-        with patch('os.chdir', side_effect=OSError("Ошибка операционной системы")):
-            cd(["test_dir"])
-            error = str(mock_logger.error.call_args)
-            assert "Ошибка операционной системы" in error
-
-
-def test_ls_Exception(fs: FakeFilesystem):
-    fs.create_dir("test_dir")
-    with patch('src.commands.def_cd.logger') as mock_logger:
-        with patch('os.chdir', side_effect=Exception("Ошибка операционной системы")):
-            cd(["test_dir"])
-            error = str(mock_logger.error.call_args)
-            assert "Ошибка операционной системы" in error
+        with patch('os.chdir', side_effect=PermissionError("Нет прав доступа")):
+                cd(["test_dir"])
+                error = str(mock_logger.error.call_args)
+                assert "Нет прав доступа" in error
 
 
 def test_cd_more_than_one_arg(fs: FakeFilesystem):

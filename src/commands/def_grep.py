@@ -6,9 +6,8 @@ import typer
 logger = logging.getLogger(__name__)
 
 
-def grep(args: list[str]) -> str:
-    typer.echo(f"\ngrep {' '.join(args)}\n")
-
+def parse_grep_args(args: list[str]) -> tuple[bool, bool, str, str] | None:
+    """Парсинг аргументов для grep команды"""
     if "-r" in args:
         recursive = True
         args.remove("-r")
@@ -22,16 +21,33 @@ def grep(args: list[str]) -> str:
         low = False
 
     if len(args) == 2:
-
         pattern = str(args[0])
         path = str(args[1])
 
         if low:
             pattern = pattern.lower()
 
-        """заменить точку на текущую директорию"""
+        # Заменить точку на текущую директорию
         if path == ".":
             path = os.getcwd()
+
+        return recursive, low, pattern, path
+    else:
+        return None
+
+
+def grep(args: list[str]) -> str:
+    typer.echo(f"\ngrep {' '.join(args)}\n")
+
+    parsed_args = parse_grep_args(args)
+
+    if parsed_args is None:
+        typer.echo(typer.style("Использование: grep <flag> <flag> <строка> <путь к файлу/директории>",fg=typer.colors.RED,))
+        logger.error("Неверное колличество аргументов")
+        return None
+
+    else:
+        recursive, low, pattern, path = parsed_args
 
         try:
             if not recursive:  # grep
@@ -63,6 +79,7 @@ def grep(args: list[str]) -> str:
 
             else:
                 files = os.listdir(path)
+                finded = False
 
                 for file_name in files:
                     full_path = os.path.join(path, file_name)
@@ -71,7 +88,7 @@ def grep(args: list[str]) -> str:
                         try:
                             with open(full_path, encoding="utf-8") as file:
                                 content = file.read()
-                                finded = False
+
 
                                 for line_num, line in enumerate(content.splitlines(), 1):
                                     if low:
@@ -103,6 +120,3 @@ def grep(args: list[str]) -> str:
         except Exception as e:
             typer.echo(typer.style(f"Произошла непредвиденная ошибка: {str(e)}", fg=typer.colors.RED))
             logger.error(f"Произошла непредвиденная ошибка '{e}'")
-    else:
-        typer.echo(typer.style("Использование: grep <flag> <flag> <строка> <путь к файлу/директории>",fg=typer.colors.RED,))
-        logger.error("Неверное колличество аргументов")
